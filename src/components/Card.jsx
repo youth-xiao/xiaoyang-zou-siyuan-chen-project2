@@ -8,11 +8,20 @@ function Card() {
         const handleKeyPress = (event) => {
             setLetter(event.key);
         };
+
+        const handleDelete = (event) => {
+            if (event.key === 'Delete' || event.key === 'Backspace') {
+                setLetter('');
+            }
+        };
     
         window.addEventListener('keypress', handleKeyPress);
+        window.addEventListener('keydown', handleDelete);
+
 
         return () => {
             window.removeEventListener('keypress', handleKeyPress);
+            window.removeEventListener('keydown', handleDelete);
         };
     }, []);
 
