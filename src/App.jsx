@@ -1,15 +1,13 @@
-import './App.css';
-import { CardDataProvider } from './components/CardDataContext';
-import Card from './components/Card';
+import './App.css'
+import AttemptRow from './components/AttemptRow';
+
 
 function App() {
-    return (
-        <div className="App">
-          <CardDataProvider>
-              <Card />
-          </CardDataProvider>
-        </div>
-    );
+  return (
+    <div className="App">
+      <AttemptRow />
+    </div>
+  );
 }
 
 export default App;
