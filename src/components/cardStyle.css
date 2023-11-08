@@ -1,14 +1,18 @@
 .card {
-    border: 1px solid grey;
-    padding: 1px;
+    display: flex;
+    border: 5px solid grey;
+    background-color: #322C2C;
+    padding: 5px;
     text-align: center;
+    justify-content: center;
+    align-items: center;
     width: 100px;
     height: 100px;
     margin: 0 auto;
 }
 
 .letter-display {
-    color: black;
+    color: #F6EEEE;
     font-size: 75px;
     font-weight: bold;
 }
