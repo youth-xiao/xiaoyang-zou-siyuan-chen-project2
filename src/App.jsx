@@ -1,11 +1,11 @@
 import './App.css'
-import AttemptRow from './components/AttemptRow'
+import Maze from './components/Maze'
 
 
 function App() {
   return (
     <div className="App">
-      <AttemptRow />
+      <Maze />
     </div>
   );
 }

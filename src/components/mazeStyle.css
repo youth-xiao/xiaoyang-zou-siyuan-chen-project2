@@ -1,0 +1,4 @@
+.maze {
+    display: flex;
+    flex-direction: column;
+}

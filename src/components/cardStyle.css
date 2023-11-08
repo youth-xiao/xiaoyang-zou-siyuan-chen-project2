@@ -1,18 +1,19 @@
 .card {
     display: flex;
-    border: 5px solid grey;
+    border: 2px solid grey;
     background-color: #322C2C;
     padding: 5px;
     text-align: center;
     justify-content: center;
     align-items: center;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     margin: 0 auto;
+    margin-right: 10px;
 }
 
 .letter-display {
     color: #F6EEEE;
-    font-size: 75px;
+    font-size: 35px;
     font-weight: bold;
 }
