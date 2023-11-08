@@ -1,0 +1,14 @@
+.card {
+    border: 1px solid grey;
+    padding: 1px;
+    text-align: center;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.letter-display {
+    color: black;
+    font-size: 75px;
+    font-weight: bold;
+}
