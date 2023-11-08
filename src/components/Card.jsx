@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useCardData } from './CardDataContext';
 import './cardStyle.css';
 
-function Card({ letter, onKeyPress }) {
+
+function Card() {
+  const { letter, setLetter } = useCardData();
+
   return (
-    <div className="card">
-      <div className="letter-display">{letter}</div>
+    <div className='card'>
+      <div className='letter-display'>{letter}</div>
     </div>
   );
 }
