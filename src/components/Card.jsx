@@ -1,17 +1,16 @@
 import PropTypes from 'prop-types';
 import './cardStyle.css';
 
-function Card({ letter, isImmutable, isCorrect, cardColorClass }) {
+function Card({ letter, isImmutable, cardColorClass }) {
   let cardStyle = 'card'; // Default class
   let isStageTwo = false;
-  if (isImmutable && isCorrect) {
+  if (isImmutable) {
     isStageTwo = true;
-    cardStyle = 'card-correct';
+    cardStyle = cardColorClass;
+  } else {
+    isStageTwo = false;
+    cardStyle = 'card';
   }
-
-  // if (cardColorClass) {
-  //   cardStyle += ` ${cardColorClass}`; // Apply additional classes
-  // }
 
   return (
     <div className={isStageTwo ? '' : cardStyle} id={isStageTwo ? cardStyle : ''}>
@@ -24,7 +23,7 @@ Card.propTypes = {
   letter: PropTypes.string.isRequired,
   isImmutable: PropTypes.bool.isRequired,
   isCorrect: PropTypes.oneOf([true, false, null]).isRequired,
-  cardColorClass: PropTypes.string, // Accepts an additional color class as a prop
+  cardColorClass: PropTypes.string,
 };
 
 export default Card;

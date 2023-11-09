@@ -2,29 +2,42 @@ import { useEffect, useState } from 'react';
 import Card from './Card';
 import './attemptRowStyle.css';
 
-const createDictionaries = (word) => {
+function calculateLetterFrequency(word) {
   const letterFrequency = {};
+
+  word.split('').forEach((letter) => {
+    if (letterFrequency[letter]) {
+      letterFrequency[letter]++;
+    } else {
+      letterFrequency[letter] = 1;
+    }
+  });
+
+  return letterFrequency;
+}
+
+function calculateLetterIndices(word) {
   const letterIndices = {};
 
   word.split('').forEach((letter, index) => {
-    if (letterFrequency[letter]) {
-      letterFrequency[letter]++;
+    if (letterIndices[letter]) {
       letterIndices[letter].push(index);
     } else {
-      letterFrequency[letter] = 1;
       letterIndices[letter] = [index];
     }
   });
 
-  return { letterFrequency, letterIndices };
-};
+  return letterIndices;
+}
 
 function AttemptRow() {
     const [letters, setLetters] = useState(['', '', '', '', '']);
     const [secretWord, setSecretWord] = useState("happy");
-    const { letterFrequency, letterIndices } = createDictionaries(secretWord);
+    const [letterFrequency, setLetterFrequency] = useState(calculateLetterFrequency(secretWord));
+    const [letterIndices, setLetterIndices] = useState(calculateLetterIndices(secretWord));
     const [isInputComplete, setInputComplete] = useState(false);
-    const [isCorrectInput, setCorrectInput] = useState(Array(5).fill(false));
+    const [isCorrectInput, setCorrectInput] = useState(Array(5).fill(null));
+    const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
 
     useEffect(() => {
         const handleKeyPress = (event) => {
@@ -46,13 +59,14 @@ function AttemptRow() {
                 }
             } else if (event.key === 'Enter' && isInputComplete) {
                 setInputComplete(true);
+                setPressedEnterCompleted(true);
                 checkInput(letters);
             } else if (event.key === 'Delete' || event.key === 'Backspace') {
                 const newLetters = [...letters];
                 for (let i = 4; i >= 0; i--) {
                     if (newLetters[i] !== '') {
                         newLetters[i] = '';
-                        setCorrectInput(Array(5).fill(false));
+                        setCorrectInput(Array(5).fill(null));
                         setInputComplete(false);
                         break;
                     }
@@ -76,9 +90,17 @@ function AttemptRow() {
                         // Decrement the frequency
                         newLetterFrequency[letter]--;
                     }                    
+                } else if (newLetterFrequency[inputLetters[i]] && !newLetterIndices[inputLetters[i]].includes(i)) {
+                    newCorrectInput[i] = false;
+                    const letter = inputLetters[i];
+                    newLetterFrequency[letter]--;    
+                } else {
+                    newCorrectInput[i] = null;
                 }
             }
             setCorrectInput(newCorrectInput);
+            setLetterFrequency(newLetterFrequency);
+            setLetterIndices(newLetterIndices);
             console.log("check input validation: " + newCorrectInput);
         };
 
@@ -95,9 +117,14 @@ function AttemptRow() {
                 <Card
                     key={ index }
                     letter={ letter }
-                    isImmutable={ isInputComplete }
-                    isCorrect={ isCorrectInput[index] }
-                    cardColorClass={isCorrectInput[index] ? 'card-correct' : ''}
+                    isImmutable={ pressedEnterCompleted }
+                    cardColorClass={
+                        isCorrectInput[index] === true
+                        ? 'card-correct'
+                        : isCorrectInput[index] === false
+                        ? 'card-half-correct'
+                        : 'card-wrong'
+                    }
                 />
             )) }
         </div>
