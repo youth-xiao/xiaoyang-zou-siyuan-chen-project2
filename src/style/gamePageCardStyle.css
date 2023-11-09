@@ -1,0 +1,61 @@
+.card {
+    display: flex;
+    border: 2px solid grey;
+    background-color: #322C2C;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    margin-right: 10px;
+}
+
+.letter-display {
+    color: #F6EEEE;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+#card-correct {
+    background-color: #157D0E;
+    display: flex;
+    border: 2px solid grey;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    margin-right: 10px;
+}
+
+#card-half-correct {
+    background-color: #D2B10B;
+    display: flex;
+    border: 2px solid grey;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    margin-right: 10px;
+}
+
+#card-wrong {
+    background-color: #535753;
+    display: flex;
+    border: 2px solid grey;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    margin-right: 10px;
+}
