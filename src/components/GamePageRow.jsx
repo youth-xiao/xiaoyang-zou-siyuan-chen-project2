@@ -64,13 +64,18 @@ function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
                         setInputComplete(true);
                         // onLetterInput(newLetters);
                     }
-                } else if (event.key === 'Enter' && isInputComplete && !pressedEnterCompleted) {
-                    console.log("hit enter");
-                    setInputComplete(true);
-                    onLetterInput(newLetters);
-                    setPressedEnterCompleted(true);
-                    checkInput(letters);
-                    console.log("isCorrectInput: " + isCorrectInput);
+                } else if (event.key === 'Enter') {
+                    if (!isInputComplete) {
+                        console.log("Letter input is too short");
+                    } else {
+                        console.log("hit enter: VALID");
+                        setInputComplete(true);
+                        onLetterInput(newLetters);
+                        setPressedEnterCompleted(true);
+                        checkInput(letters);
+                        console.log("isCorrectInput: " + isCorrectInput);
+                    }
+                   
                 } else if ((event.key === 'Delete' || event.key === 'Backspace') && !pressedEnterCompleted) {
                     const newLetters = [...letters];
                     for (let i = wordLength - 1; i >= 0; i--) {
