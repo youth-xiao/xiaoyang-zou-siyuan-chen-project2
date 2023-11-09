@@ -32,7 +32,7 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
-function GamePageRow({ wordLength }) {
+function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
     const initialLetters = Array.from({ length: wordLength }, () => '');
     const [letters, setLetters] = useState(initialLetters);
     const [secretWord, setSecretWord] = useState("playful");
@@ -44,37 +44,45 @@ function GamePageRow({ wordLength }) {
 
     useEffect(() => {
         const handleKeyPress = (event) => {
-            if (/^[a-zA-Z]$/.test(event.key)) {
-                const newLetters = [...letters];
-                let isComplete = true;
-                for (let i = 0; i < wordLength; i++) {
-                    if (newLetters[i] === '') {
-                        newLetters[i] = event.key;
-                        if (i < wordLength - 1) {
-                            isComplete = false;
+            const newLetters = [...letters];
+            if (isCurrentRow) {
+                if (/^[a-zA-Z]$/.test(event.key)) {
+                    let isComplete = true;
+                    for (let i = 0; i < wordLength; i++) {
+                        if (newLetters[i] === '') {
+                            newLetters[i] = event.key;
+                            if (i < wordLength - 1) {
+                                isComplete = false;
+                            }
+                            break;
                         }
-                        break;
                     }
-                }
-                setLetters(newLetters);
-                if (isComplete) {
+                    setLetters(newLetters);
+                    console.log("new letters" + newLetters); // works
+                    if (isComplete) {
+                        console.log("This row completes"); // works
+                        setInputComplete(true);
+                        // onLetterInput(newLetters);
+                    }
+                } else if (event.key === 'Enter' && isInputComplete && !pressedEnterCompleted) {
+                    console.log("hit enter");
                     setInputComplete(true);
-                }
-            } else if (event.key === 'Enter' && isInputComplete && !pressedEnterCompleted) {
-                setInputComplete(true);
-                setPressedEnterCompleted(true);
-                checkInput(letters);
-            } else if ((event.key === 'Delete' || event.key === 'Backspace') && !pressedEnterCompleted) {
-                const newLetters = [...letters];
-                for (let i = wordLength - 1; i >= 0; i--) {
-                    if (newLetters[i] !== '') {
-                        newLetters[i] = '';
-                        setCorrectInput(Array(wordLength).fill(null));
-                        setInputComplete(false);
-                        break;
+                    onLetterInput(newLetters);
+                    setPressedEnterCompleted(true);
+                    checkInput(letters);
+                    console.log("isCorrectInput: " + isCorrectInput);
+                } else if ((event.key === 'Delete' || event.key === 'Backspace') && !pressedEnterCompleted) {
+                    const newLetters = [...letters];
+                    for (let i = wordLength - 1; i >= 0; i--) {
+                        if (newLetters[i] !== '') {
+                            newLetters[i] = '';
+                            setCorrectInput(Array(wordLength).fill(null));
+                            setInputComplete(false);
+                            break;
+                        }
                     }
+                    setLetters(newLetters);
                 }
-                setLetters(newLetters);
             }
         };
 
@@ -112,12 +120,12 @@ function GamePageRow({ wordLength }) {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete, pressedEnterCompleted, wordLength]);
+  }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete, pressedEnterCompleted, wordLength, isCurrentRow, onLetterInput]);
 
     useEffect(() => {
         console.log("pressedEnterCompleted: " + pressedEnterCompleted);
     }, [pressedEnterCompleted]);
-    
+
     return (
         <div className='attempt-row-container'>
             <div className='attempt-row'>
@@ -142,6 +150,8 @@ function GamePageRow({ wordLength }) {
 
 GamePageRow.propTypes = {
     wordLength: PropTypes.number.isRequired,
+    isCurrentRow: PropTypes.bool.isRequired,
+    onLetterInput: PropTypes.func.isRequired,
 };
 
 export default GamePageRow;
