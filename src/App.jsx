@@ -13,9 +13,9 @@ const App = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/rules" element={<RulesPage />} />
       {/* Add a new route for the "Normal" game under the "/game/normal" path */}
-      <Route path="/game/normal" element={<GamePageRow difficulty="normal" />} />
+      <Route path="/game/normal" element={<GamePageRow difficulty="normal" wordLength={5}/>} />
       {/* Add a new route for the "Hard" game under the "/game/hard" path */}
-      <Route path="/game/hard" element={<GamePageRow difficulty="hard" />} />
+      <Route path="/game/hard" element={<GamePageRow difficulty="hard" wordLength={7}/>} />
         </Routes>
       </Layout>
       {/* <div className="App">

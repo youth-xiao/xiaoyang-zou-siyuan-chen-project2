@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import GamePageCard from './GamePageCard';
 import '../style/gamePageRowStyle.css';
+import PropTypes from 'prop-types';
+
 
 function calculateLetterFrequency(word) {
   const letterFrequency = {};
@@ -30,8 +32,9 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
-function GamePageRow() {
-    const [letters, setLetters] = useState(['', '', '', '', '']);
+function GamePageRow({ wordLength }) {
+    const initialLetters = Array.from({ length: wordLength }, () => '');
+    const [letters, setLetters] = useState(initialLetters);
     const [secretWord, setSecretWord] = useState("happy");
     const [letterFrequency, setLetterFrequency] = useState(calculateLetterFrequency(secretWord));
     const [letterIndices, setLetterIndices] = useState(calculateLetterIndices(secretWord));
@@ -44,10 +47,10 @@ function GamePageRow() {
             if (/^[a-zA-Z]$/.test(event.key)) {
                 const newLetters = [...letters];
                 let isComplete = true;
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < wordLength; i++) {
                     if (newLetters[i] === '') {
                         newLetters[i] = event.key;
-                        if (i < 4) {
+                        if (i < wordLength - 1) {
                             isComplete = false;
                         }
                         break;
@@ -63,10 +66,10 @@ function GamePageRow() {
                 checkInput(letters);
             } else if (event.key === 'Delete' || event.key === 'Backspace') {
                 const newLetters = [...letters];
-                for (let i = 4; i >= 0; i--) {
+                for (let i = wordLength - 1; i >= 0; i--) {
                     if (newLetters[i] !== '') {
                         newLetters[i] = '';
-                        setCorrectInput(Array(5).fill(null));
+                        setCorrectInput(Array(wordLength).fill(null));
                         setInputComplete(false);
                         break;
                     }
@@ -76,10 +79,10 @@ function GamePageRow() {
         };
 
         const checkInput = (inputLetters) => {
-            const newCorrectInput = Array(5).fill(false);
+            const newCorrectInput = Array(wordLength).fill(false);
             const newLetterFrequency = { ...letterFrequency };
             const newLetterIndices = { ...letterIndices };
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < wordLength; i++) {
                 if (newLetterFrequency[inputLetters[i]] && newLetterIndices[inputLetters[i]].includes(i)) {
                     newCorrectInput[i] = true;
                     const letter = inputLetters[i];
@@ -132,5 +135,9 @@ function GamePageRow() {
         </div>
     );
 }
+
+GamePageRow.propTypes = {
+    wordLength: PropTypes.number.isRequired,
+};
 
 export default GamePageRow;

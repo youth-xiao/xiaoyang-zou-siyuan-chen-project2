@@ -9,5 +9,4 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Set the container's height to the full viewport height to vertically center it */
 }
