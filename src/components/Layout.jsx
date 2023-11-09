@@ -1,5 +1,5 @@
 import Navbar from './NavBar';
-import './Layout.css'; // Create this CSS file for any layout specific styles
+import '../style/Layout.css'; // Create this CSS file for any layout specific styles
 import PropTypes from 'prop-types';
 
 const Layout = ({ children }) => {

@@ -1,4 +1,4 @@
-import './RulesPage.css';
+import '../style/RulesPage.css';
 
 function RulesPage() {
   return (

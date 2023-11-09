@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Card from './Card';
-import './attemptRowStyle.css';
+import GamePageCard from './GamePageCard';
+import '../style/gamePageRowStyle.css';
 
 function calculateLetterFrequency(word) {
   const letterFrequency = {};
@@ -30,7 +30,7 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
-function AttemptRow() {
+function GamePageRow() {
     const [letters, setLetters] = useState(['', '', '', '', '']);
     const [secretWord, setSecretWord] = useState("happy");
     const [letterFrequency, setLetterFrequency] = useState(calculateLetterFrequency(secretWord));
@@ -114,7 +114,7 @@ function AttemptRow() {
     return (
         <div className='attempt-row'>
             { letters.map((letter, index) => (
-                <Card
+                <GamePageCard
                     key={ index }
                     letter={ letter }
                     isImmutable={ pressedEnterCompleted }
@@ -131,4 +131,4 @@ function AttemptRow() {
     );
 }
 
-export default AttemptRow;
+export default GamePageRow;
