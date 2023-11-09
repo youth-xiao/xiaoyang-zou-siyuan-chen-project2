@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import GamePageRow from './GamePageRow';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import GamePageRow from "./GamePageRow";
 
 const GamePageMatrix = ({ numRows, wordLength }) => {
   const [currentRow, setCurrentRow] = useState(0);
@@ -10,7 +10,7 @@ const GamePageMatrix = ({ numRows, wordLength }) => {
     // For example, check if the row is complete and switch to the next row
 
     // For demonstration, let's just switch to the next row here
-    setCurrentRow((prevRow) => (prevRow + 1));
+    setCurrentRow((prevRow) => prevRow + 1);
   };
 
   const rowIndices = Array.from({ length: numRows }, (_, index) => index);
