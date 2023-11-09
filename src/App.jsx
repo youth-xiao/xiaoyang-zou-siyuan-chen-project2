@@ -1,11 +1,11 @@
 import './App.css'
-import AttemptRow from './components/AttemptRow';
+import GamePageRow from './components/GamePageRow';
 
 
 function App() {
   return (
     <div className="App">
-      <AttemptRow />
+      <GamePageRow />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import './cardStyle.css';
+import '../style/gamePageCardStyle.css';
 
-function Card({ letter, isImmutable, cardColorClass }) {
+function GamePageCard({ letter, isImmutable, cardColorClass }) {
   let cardStyle = 'card'; // Default class
   let isStageTwo = false;
   if (isImmutable) {
@@ -19,11 +19,11 @@ function Card({ letter, isImmutable, cardColorClass }) {
   );
 }
 
-Card.propTypes = {
+GamePageCard.propTypes = {
   letter: PropTypes.string.isRequired,
   isImmutable: PropTypes.bool.isRequired,
   isCorrect: PropTypes.oneOf([true, false, null]).isRequired,
   cardColorClass: PropTypes.string,
 };
 
-export default Card;
+export default GamePageCard;
