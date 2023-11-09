@@ -28,8 +28,6 @@ function AttemptRow() {
 
     useEffect(() => {
         const handleKeyPress = (event) => {
-            if (isInputComplete) return;
-
             if (/^[a-zA-Z]$/.test(event.key)) {
                 const newLetters = [...letters];
                 let isComplete = true;
@@ -65,12 +63,23 @@ function AttemptRow() {
 
         const checkInput = (inputLetters) => {
             const newCorrectInput = Array(5).fill(false);
+            const newLetterFrequency = { ...letterFrequency };
+            const newLetterIndices = { ...letterIndices };
             for (let i = 0; i < 5; i++) {
-                if (letterFrequency[inputLetters[i]] && letterIndices[inputLetters[i]].includes(i)) {
+                if (newLetterFrequency[inputLetters[i]] && newLetterIndices[inputLetters[i]].includes(i)) {
                     newCorrectInput[i] = true;
+                    const letter = inputLetters[i];
+                    const indexToRemove = newLetterIndices[letter].indexOf(i);
+                    if (indexToRemove !== -1) {
+                        // Remove the matched index from letterIndices
+                        newLetterIndices[letter].splice(indexToRemove, 1);
+                        // Decrement the frequency
+                        newLetterFrequency[letter]--;
+                    }                    
                 }
             }
             setCorrectInput(newCorrectInput);
+            console.log("check input validation: " + newCorrectInput);
         };
 
     window.addEventListener('keydown', handleKeyPress);
