@@ -2,18 +2,19 @@ import PropTypes from 'prop-types';
 import './cardStyle.css';
 
 function Card({ letter, isImmutable, isCorrect, cardColorClass }) {
-  // Determine the card color class based on correctness and immutability
-  let cardColorClassOverride = '';
-  if (isImmutable) {
-    cardColorClassOverride = 'card-immutable';
-  } else if (isCorrect === true) {
-    cardColorClassOverride = 'card-correct';
-  } else if (isCorrect === false) {
-    cardColorClassOverride = 'card-incorrect';
+  let cardStyle = 'card'; // Default class
+  let isStageTwo = false;
+  if (isImmutable && isCorrect) {
+    isStageTwo = true;
+    cardStyle = 'card-correct';
   }
 
+  // if (cardColorClass) {
+  //   cardStyle += ` ${cardColorClass}`; // Apply additional classes
+  // }
+
   return (
-    <div className={`card ${cardColorClassOverride} ${cardColorClass}`}>
+    <div className={isStageTwo ? '' : cardStyle} id={isStageTwo ? cardStyle : ''}>
       <div className="letter-display">{letter}</div>
     </div>
   );
