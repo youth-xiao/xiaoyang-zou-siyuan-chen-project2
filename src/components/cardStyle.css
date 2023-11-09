@@ -17,3 +17,7 @@
     font-size: 35px;
     font-weight: bold;
 }
+
+#higher-specificity .card-correct {
+    background-color: green; /* Set the background color to green for 'card-correct' */
+}

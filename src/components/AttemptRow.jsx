@@ -2,24 +2,60 @@ import { useEffect, useState } from 'react';
 import Card from './Card';
 import './attemptRowStyle.css';
 
+const createDictionaries = (word) => {
+  const letterFrequency = {};
+  const letterIndices = {};
+
+  word.split('').forEach((letter, index) => {
+    if (letterFrequency[letter]) {
+      letterFrequency[letter]++;
+      letterIndices[letter].push(index);
+    } else {
+      letterFrequency[letter] = 1;
+      letterIndices[letter] = [index];
+    }
+  });
+
+  return { letterFrequency, letterIndices };
+};
+
 function AttemptRow() {
     const [letters, setLetters] = useState(['', '', '', '', '']);
+    const [secretWord, setSecretWord] = useState("happy");
+    const { letterFrequency, letterIndices } = createDictionaries(secretWord);
+    const [isInputComplete, setInputComplete] = useState(false);
+    const [isCorrectInput, setCorrectInput] = useState(Array(5).fill(false));
+
     useEffect(() => {
         const handleKeyPress = (event) => {
+            if (isInputComplete) return;
+
             if (/^[a-zA-Z]$/.test(event.key)) {
                 const newLetters = [...letters];
+                let isComplete = true;
                 for (let i = 0; i < 5; i++) {
                     if (newLetters[i] === '') {
                         newLetters[i] = event.key;
+                        if (i < 4) {
+                            isComplete = false;
+                        }
                         break;
                     }
                 }
                 setLetters(newLetters);
+                if (isComplete) {
+                    setInputComplete(true);
+                }
+            } else if (event.key === 'Enter' && isInputComplete) {
+                setInputComplete(true);
+                checkInput(letters);
             } else if (event.key === 'Delete' || event.key === 'Backspace') {
                 const newLetters = [...letters];
                 for (let i = 4; i >= 0; i--) {
                     if (newLetters[i] !== '') {
                         newLetters[i] = '';
+                        setCorrectInput(Array(5).fill(false));
+                        setInputComplete(false);
                         break;
                     }
                 }
@@ -27,17 +63,33 @@ function AttemptRow() {
             }
         };
 
-        window.addEventListener('keydown', handleKeyPress);
-        
-        return () => {
-            window.removeEventListener('keydown', handleKeyPress);
+        const checkInput = (inputLetters) => {
+            const newCorrectInput = Array(5).fill(false);
+            for (let i = 0; i < 5; i++) {
+                if (letterFrequency[inputLetters[i]] && letterIndices[inputLetters[i]].includes(i)) {
+                    newCorrectInput[i] = true;
+                }
+            }
+            setCorrectInput(newCorrectInput);
         };
-    }, [letters]);
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete]);
 
     return (
         <div className='attempt-row'>
             { letters.map((letter, index) => (
-                <Card key={ index } letter={ letter } />
+                <Card
+                    key={ index }
+                    letter={ letter }
+                    isImmutable={ isInputComplete }
+                    isCorrect={ isCorrectInput[index] }
+                    cardColorClass={isCorrectInput[index] ? 'card-correct' : ''}
+                />
             )) }
         </div>
     );
