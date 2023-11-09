@@ -112,7 +112,8 @@ function GamePageRow() {
   }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete]);
 
     return (
-        <div className='attempt-row'>
+        <div className='attempt-row-container'>
+            <div className='attempt-row'>
             { letters.map((letter, index) => (
                 <GamePageCard
                     key={ index }
@@ -127,6 +128,7 @@ function GamePageRow() {
                     }
                 />
             )) }
+            </div>
         </div>
     );
 }
