@@ -22,7 +22,6 @@ function GamePageCard({ letter, isImmutable, cardColorClass }) {
 GamePageCard.propTypes = {
   letter: PropTypes.string.isRequired,
   isImmutable: PropTypes.bool.isRequired,
-  isCorrect: PropTypes.oneOf([true, false, null]).isRequired,
   cardColorClass: PropTypes.string,
 };
 

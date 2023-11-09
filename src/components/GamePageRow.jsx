@@ -35,11 +35,11 @@ function calculateLetterIndices(word) {
 function GamePageRow({ wordLength }) {
     const initialLetters = Array.from({ length: wordLength }, () => '');
     const [letters, setLetters] = useState(initialLetters);
-    const [secretWord, setSecretWord] = useState("happy");
+    const [secretWord, setSecretWord] = useState("playful");
     const [letterFrequency, setLetterFrequency] = useState(calculateLetterFrequency(secretWord));
     const [letterIndices, setLetterIndices] = useState(calculateLetterIndices(secretWord));
     const [isInputComplete, setInputComplete] = useState(false);
-    const [isCorrectInput, setCorrectInput] = useState(Array(5).fill(null));
+    const [isCorrectInput, setCorrectInput] = useState(Array(wordLength).fill(null));
     const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
 
     useEffect(() => {
@@ -60,11 +60,11 @@ function GamePageRow({ wordLength }) {
                 if (isComplete) {
                     setInputComplete(true);
                 }
-            } else if (event.key === 'Enter' && isInputComplete) {
+            } else if (event.key === 'Enter' && isInputComplete && !pressedEnterCompleted) {
                 setInputComplete(true);
                 setPressedEnterCompleted(true);
                 checkInput(letters);
-            } else if (event.key === 'Delete' || event.key === 'Backspace') {
+            } else if ((event.key === 'Delete' || event.key === 'Backspace') && !pressedEnterCompleted) {
                 const newLetters = [...letters];
                 for (let i = wordLength - 1; i >= 0; i--) {
                     if (newLetters[i] !== '') {
@@ -112,8 +112,12 @@ function GamePageRow({ wordLength }) {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete]);
+  }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete, pressedEnterCompleted, wordLength]);
 
+    useEffect(() => {
+        console.log("pressedEnterCompleted: " + pressedEnterCompleted);
+    }, [pressedEnterCompleted]);
+    
     return (
         <div className='attempt-row-container'>
             <div className='attempt-row'>
