@@ -5,6 +5,8 @@ import GamePageRow from "./GamePageRow";
 const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   const [currentRow, setCurrentRow] = useState(0);
   const [gameWon, setGameWon] = useState(false);
+  const [winMessage, setWinMessage] = useState(""); // New state for the message
+
   // Reset game state when difficulty changes
   useEffect(() => {
     setCurrentRow(0);
@@ -12,10 +14,14 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   }, [difficulty, numRows, wordLength]);
 
   const handleLetterInput = (isBingo) => {
+    if (gameWon === true) {
+      return;
+    }
     setCurrentRow(currentRow + 1);
     console.log("check isBingo: " + isBingo);
     if (isBingo === true) {
       setGameWon(true);
+      setWinMessage("Congratulations! Would you like to try again?");
     }
   };
 
@@ -23,7 +29,11 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
 
   return (
     <div className="game-page-matrix">
-      {gameWon && <div className="win-message">You win the game!</div>}
+      {gameWon && (
+        <div className="win-message">
+          <p>{winMessage}</p>
+        </div>
+      )}{" "}
       {rowIndices.map((rowIndex) => (
         <GamePageRow
           key={rowIndex}
@@ -33,6 +43,7 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
           onBingoStatusChange={(isBingo) => {
             handleLetterInput(isBingo);
           }}
+          gameWon={gameWon}
         />
       ))}
     </div>

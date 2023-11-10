@@ -10,3 +10,19 @@
     justify-content: center;
     align-items: center;
 }
+
+.error-message {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff0000; /* Adjust background color as needed */
+  color: #ffffff; /* Adjust text color as needed */
+  padding: 10px;
+  border-radius: 5px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}

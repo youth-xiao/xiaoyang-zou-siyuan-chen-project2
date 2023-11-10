@@ -36,6 +36,7 @@ function GamePageRow({
   isCurrentRow,
   onLetterInput,
   onBingoStatusChange,
+  gameWon,
 }) {
   const initialLetters = Array.from({ length: wordLength }, () => "");
   const [letters, setLetters] = useState(initialLetters);
@@ -52,6 +53,7 @@ function GamePageRow({
   );
   const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
   const [, setIsBingo] = useState(false); // New state to track all correct
+  const [message, setMessage] = useState(""); // New state for the message
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -59,8 +61,9 @@ function GamePageRow({
       if (!isCurrentRow || pressedEnterCompleted) {
         return;
       }
-      if (isCurrentRow) {
+      if (isCurrentRow && !gameWon) {
         if (/^[a-zA-Z]$/.test(event.key)) {
+          setMessage("");
           let isComplete = true;
           for (let i = 0; i < wordLength; i++) {
             if (newLetters[i] === "") {
@@ -77,7 +80,7 @@ function GamePageRow({
           }
         } else if (event.key === "Enter") {
           if (!isInputComplete) {
-            console.log("Letter input is too short");
+            setMessage("Word is too short, add more letter(s)"); // Set the message
           } else {
             setIsInputComplete(true);
             onLetterInput(newLetters);
@@ -167,6 +170,7 @@ function GamePageRow({
 
   return (
     <div className="attempt-row-container">
+      <div className={`error-message ${message ? "show" : ""}`}>{message}</div>
       <div className="attempt-row">
         {letters.map((letter, index) => (
           <GamePageCard
@@ -192,6 +196,7 @@ GamePageRow.propTypes = {
   isCurrentRow: PropTypes.bool.isRequired,
   onLetterInput: PropTypes.func.isRequired,
   onBingoStatusChange: PropTypes.func.isRequired,
+  gameWon: PropTypes.bool.isRequired,
 };
 
 export default GamePageRow;
