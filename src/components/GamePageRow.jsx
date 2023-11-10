@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import GamePageCard from './GamePageCard';
-import '../style/gamePageRowStyle.css';
+import { useEffect, useState, useMemo } from "react";
+import GamePageCard from "./GamePageCard";
+import "../style/gamePageRowStyle.css";
+import PropTypes from "prop-types";
 
 function calculateLetterFrequency(word) {
   const letterFrequency = {};
 
-  word.split('').forEach((letter) => {
+  word.split("").forEach((letter) => {
     if (letterFrequency[letter]) {
       letterFrequency[letter]++;
     } else {
@@ -19,7 +20,7 @@ function calculateLetterFrequency(word) {
 function calculateLetterIndices(word) {
   const letterIndices = {};
 
-  word.split('').forEach((letter, index) => {
+  word.split("").forEach((letter, index) => {
     if (letterIndices[letter]) {
       letterIndices[letter].push(index);
     } else {
@@ -30,105 +31,167 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
-function GamePageRow() {
-    const [letters, setLetters] = useState(['', '', '', '', '']);
-    const [secretWord, setSecretWord] = useState("happy");
-    const [letterFrequency, setLetterFrequency] = useState(calculateLetterFrequency(secretWord));
-    const [letterIndices, setLetterIndices] = useState(calculateLetterIndices(secretWord));
-    const [isInputComplete, setInputComplete] = useState(false);
-    const [isCorrectInput, setCorrectInput] = useState(Array(5).fill(null));
-    const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
+function GamePageRow({
+  wordLength,
+  isCurrentRow,
+  onLetterInput,
+  onBingoStatusChange,
+}) {
+  const initialLetters = Array.from({ length: wordLength }, () => "");
+  const [letters, setLetters] = useState(initialLetters);
+  const secretWord = useMemo(() => "playful", []);
+  const [letterFrequency, setLetterFrequency] = useState(
+    calculateLetterFrequency(secretWord),
+  );
+  const [letterIndices, setLetterIndices] = useState(
+    calculateLetterIndices(secretWord),
+  );
+  const [isInputComplete, setIsInputComplete] = useState(false);
+  const [isCorrectInput, setIsCorrectInput] = useState(
+    Array(wordLength).fill(null),
+  );
+  const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
+  const [, setIsBingo] = useState(false); // New state to track all correct
 
-    useEffect(() => {
-        const handleKeyPress = (event) => {
-            if (/^[a-zA-Z]$/.test(event.key)) {
-                const newLetters = [...letters];
-                let isComplete = true;
-                for (let i = 0; i < 5; i++) {
-                    if (newLetters[i] === '') {
-                        newLetters[i] = event.key;
-                        if (i < 4) {
-                            isComplete = false;
-                        }
-                        break;
-                    }
-                }
-                setLetters(newLetters);
-                if (isComplete) {
-                    setInputComplete(true);
-                }
-            } else if (event.key === 'Enter' && isInputComplete) {
-                setInputComplete(true);
-                setPressedEnterCompleted(true);
-                checkInput(letters);
-            } else if (event.key === 'Delete' || event.key === 'Backspace') {
-                const newLetters = [...letters];
-                for (let i = 4; i >= 0; i--) {
-                    if (newLetters[i] !== '') {
-                        newLetters[i] = '';
-                        setCorrectInput(Array(5).fill(null));
-                        setInputComplete(false);
-                        break;
-                    }
-                }
-                setLetters(newLetters);
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      const newLetters = [...letters];
+      if (!isCurrentRow || pressedEnterCompleted) {
+        return;
+      }
+      if (isCurrentRow) {
+        if (/^[a-zA-Z]$/.test(event.key)) {
+          let isComplete = true;
+          for (let i = 0; i < wordLength; i++) {
+            if (newLetters[i] === "") {
+              newLetters[i] = event.key;
+              if (i < wordLength - 1) {
+                isComplete = false;
+              }
+              break;
             }
-        };
-
-        const checkInput = (inputLetters) => {
-            const newCorrectInput = Array(5).fill(false);
-            const newLetterFrequency = { ...letterFrequency };
-            const newLetterIndices = { ...letterIndices };
-            for (let i = 0; i < 5; i++) {
-                if (newLetterFrequency[inputLetters[i]] && newLetterIndices[inputLetters[i]].includes(i)) {
-                    newCorrectInput[i] = true;
-                    const letter = inputLetters[i];
-                    const indexToRemove = newLetterIndices[letter].indexOf(i);
-                    if (indexToRemove !== -1) {
-                        // Remove the matched index from letterIndices
-                        newLetterIndices[letter].splice(indexToRemove, 1);
-                        // Decrement the frequency
-                        newLetterFrequency[letter]--;
-                    }                    
-                } else if (newLetterFrequency[inputLetters[i]] && !newLetterIndices[inputLetters[i]].includes(i)) {
-                    newCorrectInput[i] = false;
-                    const letter = inputLetters[i];
-                    newLetterFrequency[letter]--;    
-                } else {
-                    newCorrectInput[i] = null;
-                }
+          }
+          setLetters(newLetters);
+          if (isComplete) {
+            setIsInputComplete(true);
+          }
+        } else if (event.key === "Enter") {
+          if (!isInputComplete) {
+            console.log("Letter input is too short");
+          } else {
+            setIsInputComplete(true);
+            onLetterInput(newLetters);
+            setPressedEnterCompleted(true);
+            checkInput(letters);
+            console.log("isCorrectInput: " + isCorrectInput);
+          }
+        } else if (
+          (event.key === "Delete" || event.key === "Backspace") &&
+          !pressedEnterCompleted
+        ) {
+          const newLetters = [...letters];
+          for (let i = wordLength - 1; i >= 0; i--) {
+            if (newLetters[i] !== "") {
+              newLetters[i] = "";
+              setIsCorrectInput(Array(wordLength).fill(null));
+              setIsInputComplete(false);
+              break;
             }
-            setCorrectInput(newCorrectInput);
-            setLetterFrequency(newLetterFrequency);
-            setLetterIndices(newLetterIndices);
-            console.log("check input validation: " + newCorrectInput);
-        };
+          }
+          setLetters(newLetters);
+        }
+      }
+    };
 
-    window.addEventListener('keydown', handleKeyPress);
+    const checkInput = (inputLetters) => {
+      const newCorrectInput = Array(wordLength).fill(false);
+      const newLetterFrequency = { ...letterFrequency };
+      const newLetterIndices = { ...letterIndices };
+      for (let i = 0; i < wordLength; i++) {
+        if (
+          newLetterFrequency[inputLetters[i]] &&
+          newLetterIndices[inputLetters[i]].includes(i)
+        ) {
+          newCorrectInput[i] = true;
+          const letter = inputLetters[i];
+          const indexToRemove = newLetterIndices[letter].indexOf(i);
+          if (indexToRemove !== -1) {
+            // Remove the matched index from letterIndices
+            newLetterIndices[letter].splice(indexToRemove, 1);
+            // Decrement the frequency
+            newLetterFrequency[letter]--;
+          }
+        } else if (
+          newLetterFrequency[inputLetters[i]] &&
+          !newLetterIndices[inputLetters[i]].includes(i)
+        ) {
+          newCorrectInput[i] = false;
+          const letter = inputLetters[i];
+          newLetterFrequency[letter]--;
+        } else {
+          newCorrectInput[i] = null;
+        }
+      }
+      const areAllCorrect = newCorrectInput.every((value) => value === true);
+      console.log("check areAllCorrect: " + areAllCorrect);
+      setIsBingo(areAllCorrect);
+      setIsCorrectInput(newCorrectInput);
+      onBingoStatusChange(areAllCorrect);
+      setLetterFrequency(newLetterFrequency);
+      setLetterIndices(newLetterIndices);
+      console.log("check input validation: " + newCorrectInput);
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [letters, secretWord, letterFrequency, letterIndices, isInputComplete]);
+  }, [
+    letters,
+    secretWord,
+    letterFrequency,
+    letterIndices,
+    isInputComplete,
+    pressedEnterCompleted,
+    wordLength,
+    isCurrentRow,
+    onLetterInput,
+    isCorrectInput,
+    onBingoStatusChange,
+  ]);
 
-    return (
-        <div className='attempt-row'>
-            { letters.map((letter, index) => (
-                <GamePageCard
-                    key={ index }
-                    letter={ letter }
-                    isImmutable={ pressedEnterCompleted }
-                    cardColorClass={
-                        isCorrectInput[index] === true
-                        ? 'card-correct'
-                        : isCorrectInput[index] === false
-                        ? 'card-half-correct'
-                        : 'card-wrong'
-                    }
-                />
-            )) }
-        </div>
-    );
+  useEffect(() => {
+    console.log("pressedEnterCompleted: " + pressedEnterCompleted);
+  }, [pressedEnterCompleted]);
+
+  return (
+    <div className="attempt-row-container">
+      <div className="attempt-row">
+        {letters.map((letter, index) => (
+          <GamePageCard
+            key={index}
+            letter={letter}
+            isImmutable={pressedEnterCompleted}
+            cardColorClass={
+              isCorrectInput[index] === true
+                ? "card-correct"
+                : isCorrectInput[index] === false
+                ? "card-half-correct"
+                : "card-wrong"
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
+
+GamePageRow.propTypes = {
+  wordLength: PropTypes.number.isRequired,
+  isCurrentRow: PropTypes.bool.isRequired,
+  onLetterInput: PropTypes.func.isRequired,
+  onBingoStatusChange: PropTypes.func.isRequired,
+};
 
 export default GamePageRow;

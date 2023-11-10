@@ -1,19 +1,22 @@
-import PropTypes from 'prop-types';
-import '../style/gamePageCardStyle.css';
+import PropTypes from "prop-types";
+import "../style/gamePageCardStyle.css";
 
 function GamePageCard({ letter, isImmutable, cardColorClass }) {
-  let cardStyle = 'card'; // Default class
+  let cardStyle; // Default class
   let isStageTwo = false;
   if (isImmutable) {
     isStageTwo = true;
     cardStyle = cardColorClass;
   } else {
     isStageTwo = false;
-    cardStyle = 'card';
+    cardStyle = "card";
   }
 
   return (
-    <div className={isStageTwo ? '' : cardStyle} id={isStageTwo ? cardStyle : ''}>
+    <div
+      className={isStageTwo ? "" : cardStyle}
+      id={isStageTwo ? cardStyle : ""}
+    >
       <div className="letter-display">{letter}</div>
     </div>
   );
@@ -22,7 +25,6 @@ function GamePageCard({ letter, isImmutable, cardColorClass }) {
 GamePageCard.propTypes = {
   letter: PropTypes.string.isRequired,
   isImmutable: PropTypes.bool.isRequired,
-  isCorrect: PropTypes.oneOf([true, false, null]).isRequired,
   cardColorClass: PropTypes.string,
 };
 

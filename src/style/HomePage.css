@@ -1,0 +1,41 @@
+/* HomePage.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Use min-height instead of height */
+  position: relative; /* Add relative positioning */
+}
+
+.homepage {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff; /* Optional background color */
+  position: relative; /* Add relative positioning */
+  z-index: 1; /* Ensure content stays on top of the navbar */
+}
+
+.homepage h1 {
+  font-size: 3em; /* Larger font size */
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow here */
+  /* Add other styling properties like border, etc. */
+}
+
+.homepage .welcome-subtext {
+  font-style: italic;
+  font-size: 1.2em;
+  letter-spacing: 2px; /* Add letter spacing */
+  /* Add other styling properties */
+}
+
+/* Navbar.css */
+.navbar {
+  position: sticky; /* Make the navbar sticky */
+  top: 0; /* Stick it to the top of the viewport */
+  background-color: #333; /* Add a background color to the navbar */
+  z-index: 2; /* Ensure navbar is above the content */
+}
