@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import GamePageCard from "./GamePageCard";
 import "../style/gamePageRowStyle.css";
 import PropTypes from "prop-types";
@@ -31,26 +31,34 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
-function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
+function GamePageRow({
+  wordLength,
+  isCurrentRow,
+  onLetterInput,
+  onBingoStatusChange,
+}) {
   const initialLetters = Array.from({ length: wordLength }, () => "");
   const [letters, setLetters] = useState(initialLetters);
-  const [secretWord, setSecretWord] = useState("playful");
+  const secretWord = useMemo(() => "playful", []);
   const [letterFrequency, setLetterFrequency] = useState(
     calculateLetterFrequency(secretWord),
   );
   const [letterIndices, setLetterIndices] = useState(
     calculateLetterIndices(secretWord),
   );
-  const [isInputComplete, setInputComplete] = useState(false);
-  const [isCorrectInput, setCorrectInput] = useState(
+  const [isInputComplete, setIsInputComplete] = useState(false);
+  const [isCorrectInput, setIsCorrectInput] = useState(
     Array(wordLength).fill(null),
   );
   const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
-  const [allCorrect, setAllCorrect] = useState(false); // New state to track all correct
+  const [, setIsBingo] = useState(false); // New state to track all correct
 
   useEffect(() => {
     const handleKeyPress = (event) => {
       const newLetters = [...letters];
+      if (!isCurrentRow || pressedEnterCompleted) {
+        return;
+      }
       if (isCurrentRow) {
         if (/^[a-zA-Z]$/.test(event.key)) {
           let isComplete = true;
@@ -64,18 +72,14 @@ function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
             }
           }
           setLetters(newLetters);
-          console.log("new letters" + newLetters); // works
           if (isComplete) {
-            console.log("This row completes"); // works
-            setInputComplete(true);
-            // onLetterInput(newLetters);
+            setIsInputComplete(true);
           }
         } else if (event.key === "Enter") {
           if (!isInputComplete) {
             console.log("Letter input is too short");
           } else {
-            console.log("hit enter: VALID");
-            setInputComplete(true);
+            setIsInputComplete(true);
             onLetterInput(newLetters);
             setPressedEnterCompleted(true);
             checkInput(letters);
@@ -89,8 +93,8 @@ function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
           for (let i = wordLength - 1; i >= 0; i--) {
             if (newLetters[i] !== "") {
               newLetters[i] = "";
-              setCorrectInput(Array(wordLength).fill(null));
-              setInputComplete(false);
+              setIsCorrectInput(Array(wordLength).fill(null));
+              setIsInputComplete(false);
               break;
             }
           }
@@ -129,8 +133,10 @@ function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
         }
       }
       const areAllCorrect = newCorrectInput.every((value) => value === true);
-      setAllCorrect(areAllCorrect); // Set the new state
-      setCorrectInput(newCorrectInput);
+      console.log("check areAllCorrect: " + areAllCorrect);
+      setIsBingo(areAllCorrect);
+      setIsCorrectInput(newCorrectInput);
+      onBingoStatusChange(areAllCorrect);
       setLetterFrequency(newLetterFrequency);
       setLetterIndices(newLetterIndices);
       console.log("check input validation: " + newCorrectInput);
@@ -152,6 +158,7 @@ function GamePageRow({ wordLength, isCurrentRow, onLetterInput }) {
     isCurrentRow,
     onLetterInput,
     isCorrectInput,
+    onBingoStatusChange,
   ]);
 
   useEffect(() => {
@@ -184,6 +191,7 @@ GamePageRow.propTypes = {
   wordLength: PropTypes.number.isRequired,
   isCurrentRow: PropTypes.bool.isRequired,
   onLetterInput: PropTypes.func.isRequired,
+  onBingoStatusChange: PropTypes.func.isRequired,
 };
 
 export default GamePageRow;

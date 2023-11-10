@@ -4,13 +4,12 @@ import GamePageRow from "./GamePageRow";
 
 const GamePageMatrix = ({ numRows, wordLength }) => {
   const [currentRow, setCurrentRow] = useState(0);
-
-  const handleLetterInput = () => {
-    // Handle the entered letters and update state as needed
-    // For example, check if the row is complete and switch to the next row
-
-    // For demonstration, let's just switch to the next row here
-    setCurrentRow((prevRow) => prevRow + 1);
+  const handleLetterInput = (isBingo) => {
+    setCurrentRow(currentRow + 1);
+    console.log("check isBingo: " + isBingo);
+    if (isBingo === true) {
+      console.log("YOU WIN THE GAME!");
+    }
   };
 
   const rowIndices = Array.from({ length: numRows }, (_, index) => index);
@@ -23,6 +22,9 @@ const GamePageMatrix = ({ numRows, wordLength }) => {
           wordLength={wordLength}
           isCurrentRow={rowIndex === currentRow}
           onLetterInput={handleLetterInput}
+          onBingoStatusChange={(isBingo) => {
+            handleLetterInput(isBingo);
+          }}
         />
       ))}
     </div>

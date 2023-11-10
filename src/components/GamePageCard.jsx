@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import "../style/gamePageCardStyle.css";
 
 function GamePageCard({ letter, isImmutable, cardColorClass }) {
-  let cardStyle = "card"; // Default class
+  let cardStyle; // Default class
   let isStageTwo = false;
   if (isImmutable) {
     isStageTwo = true;
