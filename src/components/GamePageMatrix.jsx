@@ -4,11 +4,12 @@ import GamePageRow from "./GamePageRow";
 
 const GamePageMatrix = ({ numRows, wordLength }) => {
   const [currentRow, setCurrentRow] = useState(0);
+  const [gameWon, setGameWon] = useState(false);
   const handleLetterInput = (isBingo) => {
     setCurrentRow(currentRow + 1);
     console.log("check isBingo: " + isBingo);
     if (isBingo === true) {
-      console.log("YOU WIN THE GAME!");
+      setGameWon(true);
     }
   };
 
@@ -16,6 +17,7 @@ const GamePageMatrix = ({ numRows, wordLength }) => {
 
   return (
     <div className="game-page-matrix">
+      {gameWon && <div className="win-message">You win the game!</div>}
       {rowIndices.map((rowIndex) => (
         <GamePageRow
           key={rowIndex}
