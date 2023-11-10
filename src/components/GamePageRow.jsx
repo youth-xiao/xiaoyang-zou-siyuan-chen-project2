@@ -54,9 +54,14 @@ function GamePageRow({
   const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
   const [, setIsBingo] = useState(false); // New state to track all correct
   const [message, setMessage] = useState(""); // New state for the message
+  const [isResetTriggered] = useState(false);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
+      if (isResetTriggered) {
+        return;
+      }
+
       const newLetters = [...letters];
       if (!isCurrentRow || pressedEnterCompleted) {
         return;
@@ -162,6 +167,8 @@ function GamePageRow({
     onLetterInput,
     isCorrectInput,
     onBingoStatusChange,
+    gameWon,
+    isResetTriggered,
   ]);
 
   useEffect(() => {
@@ -197,6 +204,7 @@ GamePageRow.propTypes = {
   onLetterInput: PropTypes.func.isRequired,
   onBingoStatusChange: PropTypes.func.isRequired,
   gameWon: PropTypes.bool.isRequired,
+  handleReset: PropTypes.func.isRequired, // Add handleReset prop type
 };
 
 export default GamePageRow;
