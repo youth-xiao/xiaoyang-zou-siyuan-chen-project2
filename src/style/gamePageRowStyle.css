@@ -13,10 +13,10 @@
 
 .error-message {
   position: absolute;
-  top: 0;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #ff0000; /* Adjust background color as needed */
+  background-color: #cb7a7a; /* Adjust background color as needed */
   color: #ffffff; /* Adjust text color as needed */
   padding: 10px;
   border-radius: 5px;

@@ -1,0 +1,13 @@
+.win-message {
+  background-color: rgb(113, 127, 198);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.win-message.show {
+  display: block;
+}

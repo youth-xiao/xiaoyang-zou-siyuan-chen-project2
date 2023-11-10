@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import GamePageRow from "./GamePageRow";
+import "../style/gamePageMatrixStyle.css";
 
 const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   const [currentRow, setCurrentRow] = useState(0);
@@ -30,8 +31,8 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   return (
     <div className="game-page-matrix">
       {gameWon && (
-        <div className="win-message">
-          <p>{winMessage}</p>
+        <div>
+          <p className="win-message">{winMessage}</p>
         </div>
       )}{" "}
       {rowIndices.map((rowIndex) => (
