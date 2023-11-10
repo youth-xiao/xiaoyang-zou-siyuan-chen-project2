@@ -16,14 +16,14 @@ const App = () => {
           <Route
             path="/game/normal"
             element={
-              <GamePageMatrix difficulty="normal" numRows={6} wordLength={5} />
+              <GamePageMatrix key="normal-game" difficulty="normal" numRows={6} wordLength={5} />
             }
           />
           {/* Add a new route for the "Hard" game under the "/game/hard" path */}
           <Route
             path="/game/hard"
             element={
-              <GamePageMatrix difficulty="hard" numRows={5} wordLength={7} />
+              <GamePageMatrix key="hard-game" difficulty="hard" numRows={5} wordLength={7} />
             }
           />
         </Routes>

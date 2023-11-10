@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import GamePageRow from "./GamePageRow";
 
-const GamePageMatrix = ({ numRows, wordLength }) => {
+const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   const [currentRow, setCurrentRow] = useState(0);
   const [gameWon, setGameWon] = useState(false);
+  // Reset game state when difficulty changes
+  useEffect(() => {
+    setCurrentRow(0);
+    setGameWon(false);
+  }, [difficulty, numRows, wordLength]);
+
   const handleLetterInput = (isBingo) => {
     setCurrentRow(currentRow + 1);
     console.log("check isBingo: " + isBingo);
@@ -34,6 +40,7 @@ const GamePageMatrix = ({ numRows, wordLength }) => {
 };
 
 GamePageMatrix.propTypes = {
+  difficulty: PropTypes.string.isRequired,
   numRows: PropTypes.number.isRequired,
   wordLength: PropTypes.number.isRequired,
 };
