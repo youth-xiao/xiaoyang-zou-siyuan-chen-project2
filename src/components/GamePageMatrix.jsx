@@ -49,10 +49,11 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
 
   return (
     <div className="game-page-matrix">
-      <GamePageReset onReset={handleReset} />
+      <GamePageReset onReset={handleReset} buttonText="Reset Game" />
       {gameWon && (
-        <div>
+        <div className="win-message-container">
           <p className="win-message">{winMessage}</p>
+          <GamePageReset onReset={handleReset} buttonText="Yes" />
         </div>
       )}{" "}
       {rowIndices.map((rowIndex) => (
