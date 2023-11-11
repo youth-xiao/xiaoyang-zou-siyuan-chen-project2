@@ -6,7 +6,7 @@ const HomePage = () => {
       <header className="homepage">
         <h1>Welcome to Wordle Game</h1>
         <p className="welcome-subtext">
-          Test your vocabulary and see if you can guess the word in six tries.
+          Test your vocabulary and see if you can guess the word in several tries.
         </p>
       </header>
     </div>
