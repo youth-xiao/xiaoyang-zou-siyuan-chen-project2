@@ -1,0 +1,8 @@
+.reset-button {
+    background-color: rgb(123, 121, 125);
+    font-size: 20px;
+    border-radius: 5px;
+  font-weight: bold;
+  color: rgb(241, 236, 236);
+padding: 10px;
+}

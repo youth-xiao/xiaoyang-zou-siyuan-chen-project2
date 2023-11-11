@@ -1,0 +1,19 @@
+.win-message {
+  background-color: rgb(113, 127, 198);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 10px; 
+}
+
+.win-message.show {
+  display: block;
+}
+
+.win-message-container {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+}
