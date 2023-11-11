@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import GamePageRow from "./GamePageRow";
 import "../style/gamePageMatrixStyle.css";
@@ -9,6 +9,41 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   const [gameWon, setGameWon] = useState(false);
   const [winMessage, setWinMessage] = useState(""); // New state for the message
   const [isResetButtonClicked, setIsResetButtonClicked] = useState(false); // New state for the reset button
+  const wordList = useMemo(() => {
+    // Define your lists of words inside useMemo
+    const normalList = [
+      "access",
+      "noodle",
+      "muscle",
+      "summer",
+      "wealth",
+      "depend",
+      "visual",
+      "filter",
+      "museum",
+      "galaxy",
+    ];
+    const hardList = [
+      "biology",
+      "surgeon",
+      "arrange",
+      "perfect",
+      "gravity",
+      "science",
+      "wedding",
+      "uniform",
+      "healthy",
+      "insight",
+    ];
+
+    return wordLength === 6 ? normalList : hardList;
+  }, [wordLength]);
+
+    const secretWord = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * wordList.length);
+    console.log("random index: " + randomIndex);
+    return wordList[randomIndex];
+  }, [wordList]);
 
   // Reset game state when difficulty changes
   useEffect(() => {
@@ -67,7 +102,8 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
           }}
           gameWon={gameWon}
           handleReset={handleReset}
-          setIsResetButtonClicked={setIsResetButtonClicked} // Pass setIsResetButtonClicked to the GamePageRow component
+          setIsResetButtonClicked={setIsResetButtonClicked}
+          secretWord={secretWord}
         />
       ))}
     </div>
