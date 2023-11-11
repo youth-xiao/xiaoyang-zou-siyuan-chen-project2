@@ -119,11 +119,6 @@ function GamePageRow({
           if (!isInputComplete) {
             setMessage("Word is too short, add more letter(s)"); // Set the message
           } else {
-            // setIsInputComplete(true);
-            // onLetterInput(newLetters);
-            // setPressedEnterCompleted(true);
-            // checkInput(letters);
-            // console.log("isCorrectInput: " + isCorrectInput);
             event.preventDefault();
             handleEnter(letters);
           }
