@@ -37,7 +37,7 @@ function GamePageRow({
   onLetterInput,
   onBingoStatusChange,
   gameWon,
-  secretWord
+  secretWord,
 }) {
   const initialLetters = Array.from({ length: wordLength }, () => "");
   const [letters, setLetters] = useState(initialLetters);
@@ -56,7 +56,7 @@ function GamePageRow({
   );
   const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
   const [, setIsBingo] = useState(false); // New state to track all correct
-  const [message, setMessage] = useState(""); // New state for the message
+  const [message, setMessage] = useState("");
   const [isResetTriggered] = useState(false);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ function GamePageRow({
           }
         } else if (event.key === "Enter") {
           if (!isInputComplete) {
-            setMessage("Word is too short, add more letter(s)"); // Set the message
+            setMessage("Word is too short, add more letter(s)");
           } else {
             setIsInputComplete(true);
             onLetterInput(newLetters);
@@ -207,7 +207,7 @@ GamePageRow.propTypes = {
   onLetterInput: PropTypes.func.isRequired,
   onBingoStatusChange: PropTypes.func.isRequired,
   gameWon: PropTypes.bool.isRequired,
-  handleReset: PropTypes.func.isRequired, // Add handleReset prop type
+  handleReset: PropTypes.func.isRequired,
   secretWord: PropTypes.string.isRequired,
 };
 
