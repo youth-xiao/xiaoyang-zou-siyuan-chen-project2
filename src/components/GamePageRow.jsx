@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import GamePageCard from "./GamePageCard";
 import "../style/gamePageRowStyle.css";
 import PropTypes from "prop-types";
@@ -37,10 +37,13 @@ function GamePageRow({
   onLetterInput,
   onBingoStatusChange,
   gameWon,
+  secretWord
 }) {
   const initialLetters = Array.from({ length: wordLength }, () => "");
   const [letters, setLetters] = useState(initialLetters);
-  const secretWord = useMemo(() => "playful", []);
+
+  console.log("secret word: " + secretWord);
+
   const [letterFrequency, setLetterFrequency] = useState(
     calculateLetterFrequency(secretWord),
   );
@@ -236,6 +239,7 @@ GamePageRow.propTypes = {
   onBingoStatusChange: PropTypes.func.isRequired,
   gameWon: PropTypes.bool.isRequired,
   handleReset: PropTypes.func.isRequired, // Add handleReset prop type
+  secretWord: PropTypes.string.isRequired,
 };
 
 export default GamePageRow;
