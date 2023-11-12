@@ -1,14 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import GamePageRow from "./GamePageRow";
 import "../style/gamePageMatrixStyle.css";
 import GamePageReset from "./GamePageReset";
+import { useGameContext } from "../context/GameContext"; // Import the useGameContext hook
 
 const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
-  const [currentRow, setCurrentRow] = useState(0);
-  const [gameWon, setGameWon] = useState(false);
-  const [winMessage, setWinMessage] = useState("");
-  const [isResetButtonClicked, setIsResetButtonClicked] = useState(false);
+  const {
+    currentRow,
+    setCurrentRow,
+    gameWon,
+    setGameWon,
+    winMessage,
+    setWinMessage,
+    isResetButtonClicked,
+    setIsResetButtonClicked
+  } = useGameContext(); // Use the hook to get values from the context
+
+  // const [currentRow, setCurrentRow] = useState(0);
+  // const [gameWon, setGameWon] = useState(false);
+  // const [winMessage, setWinMessage] = useState("");
+  // const [isResetButtonClicked, setIsResetButtonClicked] = useState(false);
   const wordList = useMemo(() => {
     const normalList = [
       "access",
@@ -49,8 +61,7 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
     setCurrentRow(0);
     setGameWon(false);
     setWinMessage("");
-    setIsResetButtonClicked(false); // Reset the reset button state
-  }, [difficulty, numRows, wordLength]);
+  }, [setCurrentRow, setGameWon, setIsResetButtonClicked, setWinMessage]);
 
   const handleReset = () => {
     console.log("click handleReset!!!");

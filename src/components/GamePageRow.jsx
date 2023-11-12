@@ -65,16 +65,21 @@ function GamePageRow({
     try {
       const response = await fetch(url);
       const data = await response.json();
-      return Array.isArray(data) && data.length > 0 && typeof data[0] === 'object' && 'meta' in data[0];
+      return (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        typeof data[0] === "object" &&
+        "meta" in data[0]
+      );
     } catch (error) {
-      console.error('Error checking word:', error);
+      console.error("Error checking word:", error);
       return false;
     }
   }
 
   useEffect(() => {
     async function handleEnter(newLetters) {
-      const wordToCheck = newLetters.join('').toLowerCase();
+      const wordToCheck = newLetters.join("").toLowerCase();
       const isValid = await validateWord(wordToCheck);
       if (isValid) {
         // If the word is valid, proceed with the game logic
