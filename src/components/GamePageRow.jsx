@@ -31,13 +31,23 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
+const determineCardColorClass = (isCorrect) => {
+  if (isCorrect === true) {
+    return "card-correct";
+  } else if (isCorrect === false) {
+    return "card-half-correct";
+  } else {
+    return "card-wrong";
+  }
+};
+
 function GamePageRow({
   wordLength,
   isCurrentRow,
   onLetterInput,
   onBingoStatusChange,
   gameWon,
-  secretWord
+  secretWord,
 }) {
   const initialLetters = Array.from({ length: wordLength }, () => "");
   const [letters, setLetters] = useState(initialLetters);
@@ -56,10 +66,44 @@ function GamePageRow({
   );
   const [pressedEnterCompleted, setPressedEnterCompleted] = useState(false);
   const [, setIsBingo] = useState(false); // New state to track all correct
-  const [message, setMessage] = useState(""); // New state for the message
+  const [message, setMessage] = useState("");
   const [isResetTriggered] = useState(false);
 
+  async function validateWord(word) {
+    const apiKey = "369bb904-c95d-4071-a730-2b680101e051"; // Replace with your actual API key
+    const url = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word.toLowerCase()}?key=${apiKey}`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      return (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        typeof data[0] === "object" &&
+        "meta" in data[0]
+      );
+    } catch (error) {
+      console.error("Error checking word:", error);
+      return false;
+    }
+  }
+
   useEffect(() => {
+    async function handleEnter(newLetters) {
+      const wordToCheck = newLetters.join("").toLowerCase();
+      const isValid = await validateWord(wordToCheck);
+      if (isValid) {
+        // If the word is valid, proceed with the game logic
+        setIsInputComplete(true);
+        onLetterInput(newLetters);
+        setPressedEnterCompleted(true);
+        checkInput(newLetters);
+        setMessage("");
+      } else {
+        // If the word is not valid, set an error message
+        setMessage("Not a valid English word. Please try again.");
+      }
+    }
+
     const handleKeyPress = (event) => {
       if (isResetTriggered) {
         return;
@@ -88,13 +132,10 @@ function GamePageRow({
           }
         } else if (event.key === "Enter") {
           if (!isInputComplete) {
-            setMessage("Word is too short, add more letter(s)"); // Set the message
+            setMessage("Word is too short, add more letter(s)");
           } else {
-            setIsInputComplete(true);
-            onLetterInput(newLetters);
-            setPressedEnterCompleted(true);
-            checkInput(letters);
-            console.log("isCorrectInput: " + isCorrectInput);
+            event.preventDefault();
+            handleEnter(letters);
           }
         } else if (
           (event.key === "Delete" || event.key === "Backspace") &&
@@ -187,13 +228,7 @@ function GamePageRow({
             key={index}
             letter={letter}
             isImmutable={pressedEnterCompleted}
-            cardColorClass={
-              isCorrectInput[index] === true
-                ? "card-correct"
-                : isCorrectInput[index] === false
-                ? "card-half-correct"
-                : "card-wrong"
-            }
+            cardColorClass={determineCardColorClass(isCorrectInput[index])}
           />
         ))}
       </div>
@@ -207,7 +242,6 @@ GamePageRow.propTypes = {
   onLetterInput: PropTypes.func.isRequired,
   onBingoStatusChange: PropTypes.func.isRequired,
   gameWon: PropTypes.bool.isRequired,
-  handleReset: PropTypes.func.isRequired, // Add handleReset prop type
   secretWord: PropTypes.string.isRequired,
 };
 

@@ -1,16 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import GamePageRow from "./GamePageRow";
 import "../style/gamePageMatrixStyle.css";
 import GamePageReset from "./GamePageReset";
+import { useGameContext } from "../context/GameContext";
 
 const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
-  const [currentRow, setCurrentRow] = useState(0);
-  const [gameWon, setGameWon] = useState(false);
-  const [winMessage, setWinMessage] = useState(""); // New state for the message
-  const [isResetButtonClicked, setIsResetButtonClicked] = useState(false); // New state for the reset button
+  const {
+    currentRow,
+    setCurrentRow,
+    gameWon,
+    setGameWon,
+    winMessage,
+    setWinMessage,
+    isResetButtonClicked,
+    setIsResetButtonClicked,
+  } = useGameContext();
+
   const wordList = useMemo(() => {
-    // Define your lists of words inside useMemo
     const normalList = [
       "access",
       "noodle",
@@ -39,7 +46,7 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
     return wordLength === 6 ? normalList : hardList;
   }, [wordLength]);
 
-    const secretWord = useMemo(() => {
+  const secretWord = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * wordList.length);
     console.log("random index: " + randomIndex);
     return wordList[randomIndex];
@@ -50,15 +57,10 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
     setCurrentRow(0);
     setGameWon(false);
     setWinMessage("");
-    setIsResetButtonClicked(false); // Reset the reset button state
-  }, [difficulty, numRows, wordLength]);
+  }, [setCurrentRow, setGameWon, setIsResetButtonClicked, setWinMessage]);
 
   const handleReset = () => {
     console.log("click handleReset!!!");
-    // setCurrentRow(0);
-    // setGameWon(false);
-    // setWinMessage("");
-    // setIsResetButtonClicked(true); // Set the reset button state
     window.location.reload(); // Reload the page
   };
 
