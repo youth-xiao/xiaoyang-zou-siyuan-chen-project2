@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import GamePageRow from "./GamePageRow";
 import "../style/gamePageMatrixStyle.css";
 import GamePageReset from "./GamePageReset";
-import { useGameContext } from "../context/GameContext"; // Import the useGameContext hook
+import { useGameContext } from "../context/GameContext";
 
 const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
   const {
@@ -14,13 +14,9 @@ const GamePageMatrix = ({ difficulty, numRows, wordLength }) => {
     winMessage,
     setWinMessage,
     isResetButtonClicked,
-    setIsResetButtonClicked
-  } = useGameContext(); // Use the hook to get values from the context
+    setIsResetButtonClicked,
+  } = useGameContext();
 
-  // const [currentRow, setCurrentRow] = useState(0);
-  // const [gameWon, setGameWon] = useState(false);
-  // const [winMessage, setWinMessage] = useState("");
-  // const [isResetButtonClicked, setIsResetButtonClicked] = useState(false);
   const wordList = useMemo(() => {
     const normalList = [
       "access",

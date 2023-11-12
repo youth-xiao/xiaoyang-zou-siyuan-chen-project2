@@ -31,6 +31,16 @@ function calculateLetterIndices(word) {
   return letterIndices;
 }
 
+const determineCardColorClass = (isCorrect) => {
+  if (isCorrect === true) {
+    return "card-correct";
+  } else if (isCorrect === false) {
+    return "card-half-correct";
+  } else {
+    return "card-wrong";
+  }
+};
+
 function GamePageRow({
   wordLength,
   isCurrentRow,
@@ -218,13 +228,7 @@ function GamePageRow({
             key={index}
             letter={letter}
             isImmutable={pressedEnterCompleted}
-            cardColorClass={
-              isCorrectInput[index] === true
-                ? "card-correct"
-                : isCorrectInput[index] === false
-                ? "card-half-correct"
-                : "card-wrong"
-            }
+            cardColorClass={determineCardColorClass(isCorrectInput[index])}
           />
         ))}
       </div>
@@ -238,7 +242,6 @@ GamePageRow.propTypes = {
   onLetterInput: PropTypes.func.isRequired,
   onBingoStatusChange: PropTypes.func.isRequired,
   gameWon: PropTypes.bool.isRequired,
-  handleReset: PropTypes.func.isRequired,
   secretWord: PropTypes.string.isRequired,
 };
 

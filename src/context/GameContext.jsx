@@ -1,5 +1,10 @@
-import { createContext, useContext, useState } from "react";
-import PropTypes from 'prop-types'; // Import PropTypes
+import { createContext, useContext, useMemo, useState } from "react";
+import PropTypes from "prop-types";
+import {
+  INITIAL_ROW,
+  INITIAL_GAME_WON_STATE,
+  INITIAL_WIN_MESSAGE,
+} from "../utils/gameConstants";
 
 const GameContext = createContext();
 
@@ -8,25 +13,25 @@ export const useGameContext = () => {
 };
 
 export const GameProvider = ({ children }) => {
-  const [currentRow, setCurrentRow] = useState(0);
-  const [gameWon, setGameWon] = useState(false);
-  const [winMessage, setWinMessage] = useState("");
-//   const [isResetButtonClicked, setIsResetButtonClicked] = useState(false);
-  // Other game-related state and functions can be added here
+  const [currentRow, setCurrentRow] = useState(INITIAL_ROW);
+  const [gameWon, setGameWon] = useState(INITIAL_GAME_WON_STATE);
+  const [winMessage, setWinMessage] = useState(INITIAL_WIN_MESSAGE);
 
-  const contextValue = {
-    currentRow,
-    setCurrentRow,
-    gameWon,
-    setGameWon,
-    winMessage,
-    setWinMessage,
-    // Add other values and functions here
+  const contextValue = useMemo(
+    () => ({
+      currentRow,
+      setCurrentRow,
+      gameWon,
+      setGameWon,
+      winMessage,
+      setWinMessage,
+    }),
+    [currentRow, setCurrentRow, gameWon, setGameWon, winMessage, setWinMessage],
+  );
+
+  GameProvider.propTypes = {
+    children: PropTypes.node.isRequired,
   };
-    
-    GameProvider.propTypes = {
-  children: PropTypes.node.isRequired, // Add children prop validation
-};
 
   return (
     <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
